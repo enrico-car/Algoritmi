@@ -3,52 +3,61 @@
 #include <algorithm>
 using namespace std;
 
-/**
- * @brief return the sum of a sub matrix
- *
- * @param mat matrix
- * @param ls start line
- * @param le end line
- * @param cs start column
- * @param ce end column
- */
-int matrix_sum(int mat[][], int ls, int le, int cs, int ce)
+int maxVec(int arr[], int dim)
 {
-    int sum = 0;
-    for (int i = ls; i <= le; i++)
-    {
-        for (int j = cs; j <= ce; j++)
-        {
-            sum += mat[i][j];
-        }
-    }
+	int maxHere = 0;
+	int maxSoFar = 0;
+	for (int i = 0; i < dim; i++)
+	{
+		maxHere = max(maxHere + arr[i], 0);
+		maxSoFar = max(maxSoFar, maxHere);
+	}
+	return maxSoFar;
+}
 
-    return sum;
+void cleanVector(int arr[], int dim)
+{
+	for (int j = 0; j < dim; j++)
+	{
+		arr[j] = 0;
+	}
 }
 
 int main()
 {
-    int N, M;
-    ifstream in("input.txt");
-    in >> N >> M;
-    int mat[N][M];
+	int N, M;
+	ifstream in("input.txt");
+	in >> N >> M;
+	int mat[N][M];
+	int vet[M];
 
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            in >> mat[i][j];
-        }
-    }
-    cout << matrix_sum(mat, 0, 0, 1, 1);
-    // int somma = 0;
+	int max = 0;
+	int maxtemp;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			in >> mat[i][j];
+		}
+	}
 
-    // for (int i = 0; i < N; i++)
-    // {
-    //     for (int j = 0; j < M; j++)
-    //     {
-    //     }
-    // }
-    // cout << maxSoFar;
-    return 0;
+	for (int i = 0; i < N; i++)
+	{
+		cleanVector(vet, M);
+		for (int j = i; j < N; j++)
+		{
+			for (int x = 0; x < M; x++)
+			{
+				vet[x] += mat[j][x];
+			}
+			maxtemp = maxVec(vet, M);
+			if (max < maxtemp)
+			{
+				max = maxtemp;
+			}
+		}
+	}
+	ofstream out("output.txt");
+	out << max << "\n";
+	return 0;
 }
