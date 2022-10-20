@@ -33,7 +33,6 @@ void SelectionSort(int V[], int dim)
 
         V[minIndex] = temp[0];
         V[minIndex + 1] = temp[1];
-
     }
 }
 
@@ -42,7 +41,7 @@ int main()
 
     ifstream input("input.txt");
 
-    ofstream out("output.txt"); // creo oggetto ofstream per scrittura su file
+    ofstream out("output.txt");
     int dim;
 
     input >> dim;
@@ -56,17 +55,13 @@ int main()
         input >> v[i];
     }
 
-    // idea Enrico
+    SelectionSort(v, dim);
 
-    sorting per valori di inizio intervalli
-
-        SelectionSort(v, dim);
-
-    int end = v[1]; // fine del primo intervallo
+    int end = v[1];
 
     int gap[] = {end, end, 0};
 
-    for (int i = 2; i < dim; i = i + 2) // parte dall'inizio del secondo intervallo
+    for (int i = 2; i < dim; i = i + 2)
     {
         if (v[i] > end)
         {
@@ -88,7 +83,6 @@ int main()
 
     if (gap[0] == gap[1])
     {
-        // cout<<gap[2]<<"\n";
         out << gap[2];
     }
     else
