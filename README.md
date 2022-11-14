@@ -1,2 +1,2 @@
 # Algoritmi
-Algoritmi e Strutture Dati - UNITN Course from. Alberto Montressor
+Algoritmi e Strutture Dati exercises - UNITN Course from. Alberto Montressor
