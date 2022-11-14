@@ -6,6 +6,7 @@
     "initializer_list": "cpp",
     "xutility": "cpp",
     "iosfwd": "cpp",
-    "queue": "cpp"
+    "queue": "cpp",
+    "list": "cpp"
   }
 }
