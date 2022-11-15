@@ -5,16 +5,41 @@
 
 using namespace std;
 
+void dfs(const vector<vector<int>> &graph, int s,const  int &t, int &min, int &len, int level = 0)
+{
+    int v;
+
+    if (s == t)
+    {
+        if (level < min)
+        {
+            min = level;
+            len = 1;
+        }
+        else if (level == min)
+        {
+            len++;
+        }
+    }
+    for (int i = 0; i < graph[s].size(); i++)
+    {
+        v = graph[s][i];
+
+        dfs(graph, v, t, min, len, level + 1);
+    }
+}
+
 int main()
 {
     ifstream input("input.txt");
+
     ofstream out("output.txt");
     int n, m, s, t;
     input >> n >> m >> s >> t;
 
     vector<vector<int>> graph;
-    graph.resize(n);
 
+    graph.resize(n);
     int a, b;
     for (int i = 0; i < m; i++)
     {
@@ -23,39 +48,10 @@ int main()
     }
 
     int min = m;
-    int counter = 0;
+    int len = 1;
 
-    stack<int> S;
-    S.push(s);
-
-    vector<int> level(graph.size(), -1);
-    level[s] = 0;
-
-    while (!S.empty())
-    {
-        int u = S.top();
-        S.pop();
-
-        for (int i = 0; i < graph[u].size(); i++)
-        {
-            int x = graph[u][i];
-            S.push(x);
-            level[x] = level[u] + 1;
-            if (x == t)
-            {
-                if (level[x] < min)
-                {
-                    counter = 1;
-                    min = level[x];
-                }
-                else if (level[x] == min)
-                {
-                    counter++;
-                }
-            }
-        }
-    }
-    out << min << " " << counter;
+    dfs(graph, s, t, min, len);
+    out << min << " " << len;
 
     return 0;
 }
