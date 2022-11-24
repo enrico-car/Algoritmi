@@ -12,6 +12,60 @@ struct Link
     int weight;
 };
 
+int check(vector<vector<Link>> graph, int n, int p, vector<bool> killed, int devil)
+{
+
+    vector<int> roadWeight(n, -1);
+    queue<int> queue;
+    queue.push(p);
+    roadWeight[p] = 0;
+    int x;
+    killed[devil] = true;
+
+    while (!queue.empty())
+    {
+        x = queue.front();
+        queue.pop();
+        for (int i = 0; i < graph[x].size(); i++)
+        {
+            Link u = graph[x][i];
+
+            if (roadWeight[u.node] == -1 || u.weight + roadWeight[x] < roadWeight[u.node])
+            {
+                if (killed[x])
+                {
+                    killed[u.node] = true;
+                    // cout << "node" << x << " is killed so, kill " << u.node << endl;
+                }
+                else if (!killed[x] && u.node != devil)
+                {
+                    killed[u.node] = false;
+                    // cout << "node" << x << " is alive so, live " << u.node << endl;
+                }
+                roadWeight[u.node] = u.weight + roadWeight[x];
+                // cout << "node:" << u.node << " roadWeight:" << roadWeight[u.node] << " killed:" << killed[u.node] << endl;
+                queue.push(u.node);
+            }
+            else if (u.weight + roadWeight[x] == roadWeight[u.node] && !killed[x] && killed[u.node] && u.node != devil)
+            {
+                killed[u.node] = false;
+                // cout << "gesus node: " << u.node << endl;
+                queue.push(u.node);
+            }
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i < killed.size(); i++)
+    {
+        if (killed[i] == true)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
 int main()
 {
     ifstream input("input.txt");
@@ -31,58 +85,21 @@ int main()
         link.node = b;
         link.weight = c;
         graph[a].push_back(link);
+        link.node = a;
+        graph[b].push_back(link);
     }
 
-    vector<int> roadWeight(n, -1);
-    vector<bool> visited(n, false);
-    vector<bool> killed(n, false);
+    vector<bool> killed(n);
+    vector<bool> save(n, false);
 
-    queue<int> queue;
-
-    queue.push(p);
-    roadWeight[p] = 0;
-    int x;
-    int devil = 1;
-    killed[devil] = true;
-
-    while (!queue.empty())
+    for (int i = 0; i < n; i++)
     {
-        x = queue.front();
-        queue.pop();
-        for (int i = 0; i < graph[x].size(); i++)
+        killed = vector<bool>(n, false);
+        if (i != p)
         {
-            Link u = graph[x][i];
-
-            // if (!killed[x] && u.weight + roadWeight[x] == roadWeight[u.node])
-            // {
-            //     killed[u.node] = false;
-            // }
-            if (roadWeight[u.node] == -1 || u.weight + roadWeight[x] < roadWeight[u.node])
-            {
-                if (killed[x])
-                {
-                    killed[u.node] = true;
-                    cout << "node" << x << " is killed so, kill " << u.node << endl;
-                }
-                roadWeight[u.node] = u.weight + roadWeight[x];
-                cout << "node:" << u.node << " roadWeight:" << roadWeight[u.node] << " killed:" << killed[u.node] << endl;
-                queue.push(u.node);
-            }
-            if (u.weight + roadWeight[x] == roadWeight[u.node] && !killed[x])
-            {
-                killed[u.node] = false;
-                cout << "gesus" << endl;
-            }
+            cout << "devil: " << i << " count: " << check(graph, n, p, killed, i) << endl;
         }
     }
-
-    // for (int i = 0; i < killed.size(); i++)
-    // {
-    //     if (killed[i] == 1)
-    //     {
-    //         cout << "morto:" << i << endl;
-    //     }
-    // }
 
     return 0;
 }
