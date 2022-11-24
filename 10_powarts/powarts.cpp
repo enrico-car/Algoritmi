@@ -17,8 +17,8 @@ int check(vector<vector<Link>> graph, int n, int p, vector<bool> killed, int dev
 
     vector<int> roadWeight(n, -1);
     queue<int> queue;
-    queue.push(p);
-    roadWeight[p] = 0;
+    queue.push(devil);
+    roadWeight[devil] = 0;
     int x;
     killed[devil] = true;
 
@@ -32,24 +32,24 @@ int check(vector<vector<Link>> graph, int n, int p, vector<bool> killed, int dev
 
             if (roadWeight[u.node] == -1 || u.weight + roadWeight[x] < roadWeight[u.node])
             {
-                if (killed[x])
+                if (killed[x] && u.node != p)
                 {
                     killed[u.node] = true;
-                    // cout << "node" << x << " is killed so, kill " << u.node << endl;
+                    cout << "node" << x << " is killed so, kill " << u.node << endl;
                 }
                 else if (!killed[x] && u.node != devil)
                 {
                     killed[u.node] = false;
-                    // cout << "node" << x << " is alive so, live " << u.node << endl;
+                    cout << "node" << x << " is alive so, live " << u.node << endl;
                 }
                 roadWeight[u.node] = u.weight + roadWeight[x];
-                // cout << "node:" << u.node << " roadWeight:" << roadWeight[u.node] << " killed:" << killed[u.node] << endl;
+                cout << "node:" << u.node << " roadWeight:" << roadWeight[u.node] << " killed:" << killed[u.node] << endl;
                 queue.push(u.node);
             }
             else if (u.weight + roadWeight[x] == roadWeight[u.node] && !killed[x] && killed[u.node] && u.node != devil)
             {
                 killed[u.node] = false;
-                // cout << "gesus node: " << u.node << endl;
+                cout << "gesus node: " << u.node << endl;
                 queue.push(u.node);
             }
         }
@@ -97,7 +97,7 @@ int main()
         killed = vector<bool>(n, false);
         if (i != p)
         {
-            cout << "devil: " << i << " count: " << check(graph, n, p, killed, i) << endl;
+            cout << "devil: " << i << " count:\n " << check(graph, n, p, killed, i) << endl;
         }
     }
 
