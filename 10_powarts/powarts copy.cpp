@@ -44,17 +44,21 @@ int check(vector<vector<Link>> &graph, int n, int p, vector<bool> &killed, int d
                 if (killed[x] && u.node != p)
                 {
                     killed[u.node] = true;
+                    // cout << "node" << x << " is killed so, kill " << u.node << endl;
                 }
                 else if (!killed[x] && u.node != devil)
                 {
                     killed[u.node] = false;
+                    // cout << "node" << x << " is alive so, live " << u.node << endl;
                 }
                 roadWeight[u.node] = u.weight + roadWeight[x];
+                // cout << "node:" << u.node << " roadWeight:" << roadWeight[u.node] << " killed:" << killed[u.node] << endl;
                 queue.push(u.node);
             }
             else if (u.weight + roadWeight[x] == roadWeight[u.node] && !killed[x] && killed[u.node] && u.node != devil)
             {
                 killed[u.node] = false;
+                // cout << "gesus node: " << u.node << endl;
                 queue.push(u.node);
             }
         }
@@ -113,6 +117,7 @@ int main()
         queue.pop();
         if (visited[x].freq == -1)
         {
+            // cout << "visito" << x << endl;
             for (int i = 0; i < graph[x].size(); i++)
             {
                 visited[x].freq++;
@@ -123,6 +128,11 @@ int main()
 
     sort(visited.begin(), visited.end(), sortCool);
 
+    // for (auto i : visited)
+    // {
+    //     cout << "nodo: " << i.node << " freq: " << i.freq << endl;
+    // }
+
     vector<bool> killed(n);
     vector<bool> save(n, false);
     int count = 0;
@@ -130,7 +140,7 @@ int main()
     for (int i = 0; i <= n / 2; i++)
     {
         killed = vector<bool>(n, false);
-        if (visited[i].node != p )
+        if (visited[i].node != p && visited[i].freq > 1)
         {
             temp = check(graph, n, p, killed, visited[i].node);
             if (temp > count)
